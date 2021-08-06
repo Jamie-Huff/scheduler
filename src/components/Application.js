@@ -5,7 +5,7 @@ import "components/Application.scss";
 import "components/Appointment"
 import Appointment from "components/Appointment";
 import { getAppointmentsForDay, getInterview } from "./helpers/selectors";
-
+import { getInterviewersForDay } from "./helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -20,7 +20,7 @@ export default function Application(props) {
     const setDay = (day) => {
     setState({ ...state, day, });
   }
-  
+
 
   useEffect(() => {
     Promise.all([
@@ -33,16 +33,15 @@ export default function Application(props) {
     });
   }, [])
 
-  console.log(state)
-
-
+  const interviewers = getInterviewersForDay(state, state.day)
 
   const AppointmentMapper = dailyAppointments.map((appointment, index) => {
-    const interview = getInterview(state, appointment.interview)
+    const interview2 = getInterview(state, appointment.interview)
     return (
-      <Appointment key={appointment.id} interview={appointment.interview} {...appointment} />
+      <Appointment key={appointment.id} interview2={interview2} interviewers={interviewers} time={appointment.time} {...appointment}/>
     )
   })
+
 
 
   return (

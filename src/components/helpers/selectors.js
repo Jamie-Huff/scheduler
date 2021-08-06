@@ -25,3 +25,16 @@ export function getInterview(state, interview) {
   }
   return finalObj
 }
+
+export function getInterviewersForDay(state, day) {
+  //check if there are interviews that day
+  const correctDay = state.days.filter(d => d.name === day)[0];
+  if (!correctDay) { return []}
+  //add a list of the interviews for that day to appointmentList
+  const interviewersList = []
+  for (let key of correctDay.interviewers) {
+    interviewersList.push(state.interviewers[key])
+  }
+  console.log(interviewersList)
+  return interviewersList
+}
