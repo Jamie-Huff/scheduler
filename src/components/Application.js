@@ -22,13 +22,6 @@ export default function Application(props) {
     setState({ ...state, day, });
   }
 
-  function save(name, interviewer) {
-    const interview = {
-      student: name,
-      interviewer
-    };
-  }
-
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -42,11 +35,14 @@ export default function Application(props) {
     return axios.put(`/api/appointments/${appointment.id}`, { interview })
       .then(res => {
         const newState = {...state, appointments}
-        setState(prev => ({...prev, appointments}))
-        
+        setState(prev => ({...prev, appointments}))  
       })
       .catch(err => {
       })
+  }
+
+  function cancelInterview(id, interview) {
+    
   }
 
   useEffect(() => {
