@@ -35,6 +35,5 @@ export function getInterviewersForDay(state, day) {
   for (let key of correctDay.interviewers) {
     interviewersList.push(state.interviewers[key])
   }
-  console.log(interviewersList)
   return interviewersList
 }

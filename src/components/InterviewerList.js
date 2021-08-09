@@ -3,7 +3,8 @@ import "components/InterviewerList.scss"
 import InterviewerListItem from "./InterviewerListItem";
 
 export default function InterviewerList(props) {
-  const interviewerMapper = props.interviewers.map((interviewerPerson, index) => {
+  const interviewervalue = Object.values(props.interviewers) 
+  const interviewerMapper = interviewervalue.map((interviewerPerson, index) => {
     const isSelected = props.interviewer === interviewerPerson.id ? true : false 
     return (
       <InterviewerListItem

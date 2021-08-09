@@ -15,12 +15,39 @@ export default function Application(props) {
     interviewers: {}
   })
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day)
 
+
+  const dailyAppointments = getAppointmentsForDay(state, state.day)
     const setDay = (day) => {
     setState({ ...state, day, });
   }
 
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+  }
+
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    // setState({...state, appointments})
+    return axios.put(`/api/appointments/${appointment.id}`, { interview })
+      .then(res => {
+        const newState = {...state, appointments}
+        setState(prev => ({...prev, appointments}))
+        
+      })
+      .catch(err => {
+      })
+  }
 
   useEffect(() => {
     Promise.all([
@@ -33,12 +60,38 @@ export default function Application(props) {
     });
   }, [])
 
-  const interviewers = getInterviewersForDay(state, state.day)
+  
+
+  const interviewersForTheDay = getInterviewersForDay(state, state.day)
+
+  /* 
+    issues:
+      2. issue reading the students name when adding a new interview
+      3. cannot render the available interviewers when adding a new interview
+  */
 
   const AppointmentMapper = dailyAppointments.map((appointment, index) => {
-    const interview2 = getInterview(state, appointment.interview)
+    const interview = appointment.interview;
+    let updatedInterview = null;
+    if (interview) {
+      // assuming that we have correct id of interviewer here.
+      const interviewerId = interview.interviewer;
+      // const interviewer = state.interviewers.find(x=>x.id === interviewerId);
+      const interviewer = state.interviewers[interviewerId]
+      const student = 'bob'
+      updatedInterview = {...updatedInterview, interviewer, student};
+      // result of this we will have:
+      // interview: {id:, name, interviewer:{id: , name: }} 
+    }
     return (
-      <Appointment key={appointment.id} interview2={interview2} interviewers={interviewers} time={appointment.time} {...appointment}/>
+      <Appointment 
+        interviewersForTheDay={interviewersForTheDay}
+        key={appointment.id} 
+        interview={updatedInterview}
+        interviewers={state.interviewers} 
+        time={appointment.time} 
+        bookInterview={bookInterview}
+        {...appointment}/>
     )
   })
 
@@ -67,7 +120,10 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {AppointmentMapper}
-        <Appointment key="last" time="5pm" />
+        <Appointment 
+        key="last" 
+        time="5pm" 
+        />
       </section>
     </main>
   );
