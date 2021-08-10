@@ -19,7 +19,7 @@ export default function InterviewerList(props) {
 
 
   return (
-    <ul class="interview_list_container">
+    <ul className="interview_list_container">
       
       {interviewerMapper}
     </ul>

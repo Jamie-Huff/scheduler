@@ -10,9 +10,6 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 
 export default function Appointment(props) {
-
-  console.log('Props in Appointment ####: ', props)
-
   const EMPTY = "EMPTY"
   const SHOW = "SHOW"
   const CREATE = "CREATE"
@@ -23,8 +20,6 @@ export default function Appointment(props) {
   const EDIT = "EDIT"
   const ERROR_SAVE = "ERROR_SAVE"
   const ERROR_DELETE = "ERROR_DELETE"
-
-  //transition vs transition replace
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -58,7 +53,6 @@ export default function Appointment(props) {
           interviewer={props.interview ? props.interview.interviewer : null}
           interview={props.interview}
           interviewers={props.interviewers}
-          // on delete should first transition to warning message, prompt user to confirm the message, and then go back
           onDelete={() => transition(CONFIRM)}
           onEdit={() => transition(EDIT)}
         />
