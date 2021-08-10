@@ -31,7 +31,6 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    // setState({...state, appointments})
     return axios.put(`/api/appointments/${appointment.id}`, { interview })
       .then(res => {
         const newState = {...state, appointments}
@@ -41,8 +40,22 @@ export default function Application(props) {
       })
   }
 
-  function cancelInterview(id, interview) {
-    
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    return axios.delete(`/api/appointments/${id}`)
+    .then(res => {
+      setState(prev => ({...prev, appointments}))
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   useEffect(() => {
@@ -56,20 +69,15 @@ export default function Application(props) {
     });
   }, [])
 
-  
-
   const interviewersForTheDay = getInterviewersForDay(state, state.day)
 
-  /* 
-    issues:
-      2. issue reading the students name when adding a new interview
-      3. cannot render the available interviewers when adding a new interview
-  */
-
   const AppointmentMapper = dailyAppointments.map((appointment, index) => {
-    const interview = appointment.interview;
+    console.log(appointment)
     let updatedInterview = null;
-    if (interview) {
+
+    if (appointment !== null && appointment.interview) {
+
+      const interview = appointment.interview;
       // assuming that we have correct id of interviewer here.
       const interviewerId = interview.interviewer;
       // const interviewer = state.interviewers.find(x=>x.id === interviewerId);
@@ -87,6 +95,8 @@ export default function Application(props) {
         interviewers={state.interviewers} 
         time={appointment.time} 
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
+        onConfirm={cancelInterview}
         {...appointment}/>
     )
   })

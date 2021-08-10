@@ -5,7 +5,7 @@ import Button from "components/Button";
 
 export default function Form(props) {
 
-
+  console.log('Props in forms @@@@: ', props)
   const [name, setName] = useState(props.name || "")
   const [interviewer, setInterviewer] = useState(props.interviewer || null)
   const onChange = function(e) {
