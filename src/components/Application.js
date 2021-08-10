@@ -36,9 +36,14 @@ export default function Application(props) {
         const newState = {...state, appointments}
         setState(prev => ({...prev, appointments}))  
       })
-      .catch(err => {
-      })
   }
+
+  axios.put("/appointments/:id", (request, response) => {
+    if (process.env.TEST_ERROR) {
+      setTimeout(() => response.status(500).json({}), 1000);
+      return;
+    }
+});
 
   function cancelInterview(id) {
     const appointment = {
@@ -52,9 +57,6 @@ export default function Application(props) {
     return axios.delete(`/api/appointments/${id}`)
     .then(res => {
       setState(prev => ({...prev, appointments}))
-    })
-    .catch(err => {
-      console.log(err)
     })
   }
 
