@@ -20,7 +20,7 @@ export default function Application(props) {
   const interviewersForTheDay = getInterviewersForDay(state, state.day)
 
   const AppointmentMapper = dailyAppointments.map((appointment, index) => {
-    console.log(appointment)
+    console.log('appointments', appointment)
     let updatedInterview = null;
 
     if (appointment !== null && appointment.interview) {
@@ -34,8 +34,6 @@ export default function Application(props) {
       // result of this we will have:
       // interview: {id:, name, interviewer:{id: , name: }} 
     }
-
-
     return (
       <Appointment 
         interviewersForTheDay={interviewersForTheDay}
@@ -49,8 +47,6 @@ export default function Application(props) {
         {...appointment}/>
     )
   })
-
-
 
   return (
     <main className="layout">

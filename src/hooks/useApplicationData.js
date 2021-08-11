@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import DayListItem from "components/DayListItem";
 
 
 export default function useApplicationData(props) {
@@ -9,6 +10,29 @@ export default function useApplicationData(props) {
     appointments: {},
     interviewers: {}
   })
+
+  console.log('days', state.days)
+
+  const updateSpots = (days, newAppointments, dayOfDays) => {
+    let quickSpots = 5
+    for (let appointmentId of days[dayOfDays-1].appointments) {
+      if (newAppointments[appointmentId].interview) {
+        quickSpots -= 1
+      }
+    }
+    console.log('quick spots', quickSpots)
+    return quickSpots
+  }
+
+  const updateAppointments = (appointments) => {
+    const dayObject = state.days.find(dayString => dayString.name === state.day)
+    dayObject.spots = updateSpots(state.days, appointments, dayObject.id)
+    const days = state.days
+    days[dayObject.id - 1] = dayObject
+
+    setState(prev => 
+      { return ({...prev, appointments: appointments, days: days })})  
+  }
 
   function cancelInterview(id) {
     const appointment = {
@@ -21,7 +45,7 @@ export default function useApplicationData(props) {
     }
     return axios.delete(`/api/appointments/${id}`)
     .then(res => {
-      setState(prev => ({...prev, appointments}))
+      updateAppointments(appointments)
     })
   }
 
@@ -36,9 +60,8 @@ export default function useApplicationData(props) {
     };
     return axios.put(`/api/appointments/${appointment.id}`, { interview })
       .then(res => {
-        const newState = {...state, appointments}
-        setState(prev => 
-          { return ({...prev, appointments: appointments})})  
+        console.log('test123')
+        updateAppointments(appointments)
       })
   }
 
@@ -58,7 +81,12 @@ export default function useApplicationData(props) {
   }
 
 
-  return { state, setState, bookInterview, cancelInterview, setDay }
+  return { 
+    state, 
+    setState, 
+    bookInterview, 
+    cancelInterview, 
+    setDay }
 
 
 
