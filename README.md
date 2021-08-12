@@ -1,5 +1,8 @@
 # Interview Scheduler
 
+Interview scheduler is a program designed to schedule, keep track of, and manage appointments.
+List of available interviewers, appointments, and dates are available from scheduler api
+
 ## Setup
 
 Install dependencies with `npm install`.
