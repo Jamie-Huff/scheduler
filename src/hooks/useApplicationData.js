@@ -11,7 +11,6 @@ export default function useApplicationData(props) {
     interviewers: {}
   })
 
-  console.log('days', state.days)
 
   const updateSpots = (days, newAppointments, dayOfDays) => {
     let quickSpots = 5
@@ -20,7 +19,6 @@ export default function useApplicationData(props) {
         quickSpots -= 1
       }
     }
-    console.log('quick spots', quickSpots)
     return quickSpots
   }
 
@@ -60,7 +58,6 @@ export default function useApplicationData(props) {
     };
     return axios.put(`/api/appointments/${appointment.id}`, { interview })
       .then(res => {
-        console.log('test123')
         updateAppointments(appointments)
       })
   }

@@ -20,7 +20,6 @@ export default function Application(props) {
   const interviewersForTheDay = getInterviewersForDay(state, state.day)
 
   const AppointmentMapper = dailyAppointments.map((appointment, index) => {
-    console.log('appointments', appointment)
     let updatedInterview = null;
 
     if (appointment !== null && appointment.interview) {
