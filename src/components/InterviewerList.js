@@ -18,7 +18,6 @@ function InterviewerList(props) {
     )
   })
 
-
   return (
     <ul className="interview_list_container">
       

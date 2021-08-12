@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import DayList from "./DayList";
 import "components/Application.scss";
 import "components/Appointment"
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview } from "./helpers/selectors";
+import { getAppointmentsForDay } from "./helpers/selectors";
 import { getInterviewersForDay } from "./helpers/selectors";
 import useApplicationData from "hooks/useApplicationData";
 
@@ -19,18 +18,19 @@ export default function Application(props) {
   const dailyAppointments = getAppointmentsForDay(state, state.day)
   const interviewersForTheDay = getInterviewersForDay(state, state.day)
 
-  const AppointmentMapper = dailyAppointments.map((appointment, index) => {
+  const AppointmentMapper = dailyAppointments.map((appointment) => {
     let updatedInterview = null;
+    /* 
+    Takes in an appointment, and grabs the interview component of it, and the interviewer from that
+    Sets the value of student temporarily, which will never be used, return a value with the updated information
+    */
 
     if (appointment !== null && appointment.interview) {
       const interview = appointment.interview;
-      // assuming that we have correct id of interviewer here.
       const interviewerId = interview.interviewer;
-      // const interviewer = state.interviewers.find(x=>x.id === interviewerId);
       const interviewer = state.interviewers[interviewerId]
-      const student = 'bob'
+      const student = 'case'
       updatedInterview = {...updatedInterview, interviewer, student};
-      // result of this we will have:
       // interview: {id:, name, interviewer:{id: , name: }} 
     }
     return (

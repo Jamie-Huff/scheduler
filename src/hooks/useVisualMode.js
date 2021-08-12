@@ -4,6 +4,7 @@ export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial])
 
+  // show different states of the GUI depending on what buttons the user clicks, options are found in index.js
   const transition = (update, replace = false) => {
     if (replace) {
       history.pop()

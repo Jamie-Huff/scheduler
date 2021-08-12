@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import DayListItem from "components/DayListItem";
 
 
 export default function useApplicationData(props) {
@@ -11,9 +10,10 @@ export default function useApplicationData(props) {
     interviewers: {}
   })
 
-
+  // Update the number of appointments available depending on how many are booked for the day, starting with 5
   const updateSpots = (days, newAppointments, dayOfDays) => {
     let quickSpots = 5
+    // every time an appointment is found we take one away from the number of appointments available
     for (let appointmentId of days[dayOfDays-1].appointments) {
       if (newAppointments[appointmentId].interview) {
         quickSpots -= 1
@@ -21,17 +21,17 @@ export default function useApplicationData(props) {
     }
     return quickSpots
   }
-
+  // Update the appointments for the day every time a new one is created or deleted, using our update spots funciton aswell.
   const updateAppointments = (appointments) => {
     const dayObject = state.days.find(dayString => dayString.name === state.day)
     dayObject.spots = updateSpots(state.days, appointments, dayObject.id)
     const days = state.days
     days[dayObject.id - 1] = dayObject
-
+    // Update our state with the new values
     setState(prev => 
       { return ({...prev, appointments: appointments, days: days })})  
   }
-
+  // Cancel (delete) an interview if it is no longer needed
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
@@ -46,7 +46,7 @@ export default function useApplicationData(props) {
       updateAppointments(appointments)
     })
   }
-
+  // Book a new interview
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -56,12 +56,14 @@ export default function useApplicationData(props) {
       ...state.appointments,
       [id]: appointment
     };
+    // Fetch from the api using the appointment id
     return axios.put(`/api/appointments/${appointment.id}`, { interview })
       .then(res => {
+        // updates the state in the update appointments function
         updateAppointments(appointments)
       })
   }
-
+  // get request from our api to get our needed data
   useEffect(() => {
     Promise.all([
       axios.get('/api/days'),
@@ -77,14 +79,11 @@ export default function useApplicationData(props) {
     setState({ ...state, day, });
   }
 
-
   return { 
     state, 
     setState, 
     bookInterview, 
     cancelInterview, 
     setDay }
-
-
 
 }

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "components/Appointment/styles.scss"
 import Header from "./Header";
 import Show from "./Show";
@@ -15,7 +15,6 @@ export default function Appointment(props) {
   const CREATE = "CREATE"
   const SAVING = "SAVING"
   const DELETING = "DELETING"
-  const DELETE = "DELETE"
   const CONFIRM = "CONFIRM"
   const EDIT = "EDIT"
   const ERROR_SAVE = "ERROR_SAVE"
@@ -82,7 +81,7 @@ export default function Appointment(props) {
         <Status message={'Deleting..'}/>
       }
       {mode === CONFIRM &&
-        <Confirm onConfirm={cancelInterview} message={'Confirm Delete?'}/>
+        <Confirm onConfirm={cancelInterview} message={'Confirm Delete?'} onCancel={back}/>
       }
       {mode === ERROR_SAVE &&
         <Error 

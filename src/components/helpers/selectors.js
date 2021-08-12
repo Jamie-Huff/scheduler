@@ -1,5 +1,9 @@
+/* 
+This function takes in the state, and the day of the week, and returns all the apppointments
+thats are scheduled for that day
+*/
 export function getAppointmentsForDay(state, day) {
-  //check if there are interviews that day
+  // set CorrectDay to a filtered version of the days stat
   const correctDay = state.days.filter(d => d.name === day)[0];
   if (!correctDay) { return []}
   //add a list of the interviews for that day to appointmentList
@@ -10,6 +14,7 @@ export function getAppointmentsForDay(state, day) {
   return appointmentList
 }
 
+// when clicking on an exisiting interview, access all the values associated with it
 export function getInterview(state, interview) {
   if (!interview) {
     return null
