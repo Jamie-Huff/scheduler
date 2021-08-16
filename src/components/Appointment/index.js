@@ -19,6 +19,7 @@ export default function Appointment(props) {
   const EDIT = "EDIT"
   const ERROR_SAVE = "ERROR_SAVE"
   const ERROR_DELETE = "ERROR_DELETE"
+  const ERROR_EDIT = "ERROR_EDIT"
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -33,6 +34,17 @@ export default function Appointment(props) {
     props.bookInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(error => transition(ERROR_SAVE))
+  }
+
+  function edit(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    transition(SAVING)
+    props.bookInterview(props.id, interview)
+    .then(() => transition(SHOW))
+    .catch(error => transition(ERROR_EDIT))
   }
 
   function cancelInterview() {
@@ -60,7 +72,7 @@ export default function Appointment(props) {
         <Form 
         interviewers={props.interviewersForTheDay}
         onCancel={() => back()}
-        onSave={save}
+        onSave={edit}
         name={props.interview.student}
         interviewer={props.interview.interviewer}
         />
@@ -93,6 +105,12 @@ export default function Appointment(props) {
       {mode === ERROR_DELETE &&
         <Error 
           message="Unable to cancel appointment"
+          onClose={() => transition(SHOW, true)}
+        />
+      }
+      {mode === ERROR_EDIT &&
+        <Error 
+          message="Unable to edit appointment"
           onClose={() => transition(SHOW, true)}
         />
       }
